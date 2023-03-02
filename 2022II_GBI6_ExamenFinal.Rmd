@@ -152,7 +152,7 @@ ggarrange(p3, ggarrange(p1, p2, labels =c("b", "c"), nrow=2),
 
 ### [1.0 punto] 1.1. Interprete lo que se muestra en la figura anterior
 
-** **
+**La diferencia entre tamaños de picos entre las especies Barbijo y Papúa con Adelia es significativa, sin embargo entre estas dos ultimas la diferencia es mínima. Se puede observar que en cambio entre machos y hembras, el macho tiene el pico mas largo. La línea de regresión lineal ayuda a entender la relación entre la anchura y la longitud del pico para cada especie/isla **
 
 ### [3.0 puntos] 1.2. Genere dos gráficas `p4` y `p5`donde: 
 
@@ -174,8 +174,13 @@ cat(paste0('<center><img src="', img4,'" width="200" height="200" alt=""></cente
 
 
 ```{r p1.1, echo=TRUE, warning=FALSE, fig.height=8}
-# Escriba aquí su código
-
+library(ggcorrplot)
+ggcorrplot(corr_matrix, hc.order = TRUE, type = "lower", lab = TRUE,
+           p.mat = "p", insig = "blank",
+           colors = c("green", "white", "purple"),
+           title = "Correlation plot of gene expression data",
+           ggtheme = ggplot2::theme_bw(),
+           legend.title = "Correlation",
 ```
 
 **INTERPRETACIÓN**
@@ -216,7 +221,7 @@ Usualmente lo que se desea es saber si las muestras vienen de diferentes tejidos
 
 ```{r}
 metadata_heatmap <- metadata  %>% 
-  mutate(sample = paste0('X', sample)) %>% # nombres de muestras
+  mutate(sample = paste0('X', sample)) %>% 
   filter(sample %in% colnames(expr_dist)) %>% 
   dplyr::select(sample, treatment_hours, serum) %>% 
   mutate(sample=factor(sample, levels=colnames(expr_dist))) %>% 
@@ -269,6 +274,11 @@ Aquí se carga los datos `EMTAB6141.rdata` que se requiere para este ejercicio. 
 load('data/EMTAB6141.rdata') 
 load('data/metadata.rdata')
 str(expression)
+
+mat <- read.table(url(mat_url), sep = "\t", header = TRUE)
+metadata <- read.table(url(metadata_url), sep = "\t", header = TRUE)
+sig_genes <- readLines(url(sig_genes_url))
+
 ```
 
 
